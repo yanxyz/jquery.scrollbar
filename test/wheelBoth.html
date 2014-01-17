@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <title></title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="wrap">
+   <p>wheelBoth: true</p>
+    <div class="view"  id="test">
+      <div class="content">
+        <img src="heluo.jpg" alt="" />
+      </div>
+      <!-- div.scrollbar -->
+    </div>
+    <p>只有一个滚动条时，启用这个选项后鼠标 x,y 滚轴均可控制这个滚动条。</p>
+    <p>常用的鼠标只有 y 滚轴，只能滚动垂直滚动条而不能滚动水平滚动条。启用这个选项后，便可以滚动水平滚动条。</p>
+  </div>
+
+  <script src="http://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+  <script src="../scrollbar.js"></script>
+  <script>
+    $('#test').scrollbar({
+      axis: 'x',
+      wheelBoth: true
+    })
+  </script>
+</body>
+</html>

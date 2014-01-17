@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8" />
+	<title></title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .container { position: relative; width: 500px; height: 500px;}
+    .scrollbar-y { right: -50px;}
+  </style>
+</head>
+<body>
+	<div class="wrap">
+    <p>三层结构</p>
+    <div class="container" id="test">
+      <div class="view">
+        <div class="content">
+          <img src="heluo.jpg" alt="" />
+        </div>
+      </div>
+      <!-- div.scrollbar -->
+    </div>
+    <p>滚动条不是滚动元素的子元素, 在滚动的时不用更新滚动条的位置，这样可以避免 IE 下的抖动。</p>
+    <p>滚动条可以放到滚动元素外面。</p>
+  </div>
+
+  <script src="http://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+	<script src="../scrollbar.js"></script>
+	<script>
+		$('#test').scrollbar({
+      scroller: '.view',
+      axis: 'xy'
+    })
+	</script>
+</body>
+</html>

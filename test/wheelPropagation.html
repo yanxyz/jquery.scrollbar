@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <title></title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="wrap" style="height: 5000px;">
+    <p>wheelPropagation: true</p>
+    <div class="view"  id="test1">
+      <div class="content">
+        <img src="heluo.jpg" alt="" />
+      </div>
+      <!-- div.scrollbar -->
+    </div>
+    <p>启用这个选项后，允许滚动冒泡。当滚动条到头后可以继续滚动外层的滚动条。</p>
+  </div>
+
+  <script src="http://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+  <script src="../scrollbar.js"></script>
+  <script>
+    $('#test1').scrollbar({
+      axis: 'xy',
+      wheelPropagation: true
+    })
+  </script>
+</body>
+</html>

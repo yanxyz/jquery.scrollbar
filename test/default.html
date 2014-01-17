@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8" />
+	<title></title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+	<div class="wrap">
+    <p>二层结构</p>
+    <div class="view" id="test1">
+      <div class="content">
+        <img src="heluo.jpg" alt="" />
+      </div>
+      <!-- div.scrollbar -->
+    </div>
+    <p>滚动条在滚动元素内，这样滚动的时候需要更改滚动条的位置，在 IE 下会导致滚动条抖动。</p>
+    <p>滚动条不能放到滚动元素外面，因为 overflow: hidden</p>
+  </div>
+
+  <script src="http://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+	<script src="../scrollbar.js"></script>
+	<script>
+		$('#test1').scrollbar({
+      axis: 'xy'
+    })
+	</script>
+</body>
+</html>
