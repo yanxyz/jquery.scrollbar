@@ -1,6 +1,6 @@
 /*!
  * scrollbar v1.0.0 by Ivan Yan 2014-01-16
- * https://github.com/yanxyz/scrollbar
+ * https://github.com/yanxyz/jquery.scrollbar
  * MIT License
  */
 
