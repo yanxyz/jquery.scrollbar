@@ -69,6 +69,16 @@ html 结构分为两种情况， 分别见 test 目录下 default.html scroller.
 当滚动条所在容器的大小改变时，滚动条也需要跟着变，调用方法 .refesh()
 
 
+## 压缩
+
+build 目录 min.js 用来压缩插件。
+
+```bash
+cd path/to/build
+npm install -g uglifyjs
+node min
+```
+
 ## 版权
 
 MIT

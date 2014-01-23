@@ -2,6 +2,7 @@
 
 # specail
 dist
+jquery.scrollbar.js
 
 # Numerous always-ignore extensions
 *.diff
