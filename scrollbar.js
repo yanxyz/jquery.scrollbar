@@ -1,5 +1,5 @@
 /*!
- * scrollbar v1.0.0 by Ivan Yan 2014-01-16
+ * scrollbar v1.1.0 by Ivan Yan 2014-01-24
  * https://github.com/yanxyz/jquery.scrollbar
  * MIT License
  */
@@ -53,7 +53,7 @@
           case 'x':
             $bar = $elem.children('.scrollbar-x')
             if (!$bar.length) {
-              $bar = $('<div class="scrollbar scrollbar-x"><div class="scrollbar-thumb"></div></div>').appendTo($elem)
+              $bar = $('<div class="scrollbar scrollbar-x" style="display: none;"><div class="scrollbar-thumb"></div></div>').appendTo($elem)
             }
             that.hasX = true
             that.$barX = $bar
@@ -62,7 +62,7 @@
           case 'y':
             $bar = $elem.children('.scrollbar-y')
             if (!$bar.length) {
-              $bar = $('<div class="scrollbar scrollbar-y"><div class="scrollbar-thumb"></div></div>').appendTo($elem)
+              $bar = $('<div class="scrollbar scrollbar-y" style="display: none;"><div class="scrollbar-thumb"></div></div>').appendTo($elem)
             }
             that.hasY = true
             that.$barY = $bar
@@ -82,13 +82,11 @@
           createBar('x')
           createBar('y')
       }
-
       this.refresh()
       this._bind()
     },
     refresh: function() {
       var $elem = this.$scroller
-      console.log($elem)
       var options = this.options
       // TODO: 是否考虑 padding 呢
       var w = this.containerWidth = $elem.width()
@@ -109,7 +107,10 @@
         // 后面计算滑块的 left 值: elemleft*ratio
         this.ratioX = (w - w1) / deltaX
         if (this.type) {
-          this.$barX.width(w)
+          this.$barX.css({
+            display: 'block',
+            width: w
+          })
         } else {
           this.$barX.css({
             width: w,
@@ -119,6 +120,7 @@
         }
         this.$thumbX.width(w1)
       } else {
+        this.hasX && this.$barX.hide()
         this.barXActive = false
       }
 
@@ -128,7 +130,10 @@
         h1 = this.thumbYHeight = Math.max(options.minThumb, parseInt(h * h / H, 10))
         this.ratioY = (h - h1) / deltaY
         if (this.type) {
-          this.$barY.height(h)
+          this.$barY.css({
+            display: 'block',
+            height: h
+          })
         } else {
           this.$barY.css({
             height: h,
@@ -136,9 +141,9 @@
             right: r - left
           })
         }
-
         this.$thumbY.height(h1)
       } else {
+        this.hasY && this.$barY.hide()
         this.barYActive = false
       }
 
@@ -157,7 +162,7 @@
           this.$barX.css({
             left: left,
             bottom: this.barXBottom - top
-          })
+          }).show()
         }
         this.$thumbX.css('left', parseInt(left * this.ratioX, 10))
       }
@@ -167,7 +172,7 @@
           this.$barY.css({
             top: top,
             right: this.barYRight - left
-          })
+          }).show()
         }
         this.$thumbY.css('top', parseInt(top * this.ratioY, 10))
       }
@@ -183,6 +188,8 @@
       var $barY = this.$barY
       var $thumbY = this.$thumbY
       var $doc = $(document)
+      var hasX = this.hasX
+      var hasY = this.hasY
       var x = this.barXActive
       var y = this.barYActive
 
@@ -219,6 +226,7 @@
           })
         },
         wheel: function() {
+          // bug: type=1 时悬停在滚动条上不能滚动
           // https://developer.mozilla.org/en-US/docs/Web/Reference/Events/wheel
           var wheel = ('onwheel' in document || document.documentMode > 8) ? 'wheel' :
             'onmousewheel' in document ? 'mousewheel' : 'DOMMouseScroll'
@@ -270,7 +278,7 @@
           // TODO: 滚动距离
           var click = 'click' + ns
 
-          if (x) {
+          if (hasX) {
             $barX.on(click, function(e) {
               var delta = e.pageX - $thumbX.offset().left
               var left = $elem.scrollLeft()
@@ -288,7 +296,7 @@
             })
           }
 
-          if (y) {
+          if (hasY) {
             $barY.on(click, function(e) {
               var delta = e.pageY - $thumbY.offset().top
               var top = $elem.scrollTop()
@@ -312,6 +320,7 @@
           var mu = 'mouseup' + ns
           var start = {}
           var current = {}
+          var klass = 'scrolling'
 
           function moveX(deltaX) {
             $elem.scrollLeft($elem.scrollLeft() + parseInt(deltaX / that.ratioX, 10))
@@ -321,66 +330,64 @@
             $elem.scrollTop($elem.scrollTop() + parseInt(deltaY / that.ratioY, 10))
           }
 
-          if (x) {
+          if (hasX) {
             $barX.on(md, function (e) {
               start.pageX = e.pageX
-              $barX.addClass('scrolling')
-              e.stopPropagation()
-              e.preventDefault()
+              $barX.addClass(klass)
+              return false
             })
 
             $doc
             .on(mm, function (e) {
-              if ($barX.hasClass('scrolling')) {
+              if ($barX.hasClass(klass)) {
                 current.pageX = e.pageX
                 moveX(current.pageX - start.pageX)
                 start.pageX = current.pageX
-                e.stopPropagation()
-                e.preventDefault()
+                return false
               }
             })
             .on(mu, function (e) {
-              if ($barX.hasClass('scrolling')) {
-                $barX.removeClass('scrolling')
+              if ($barX.hasClass(klass)) {
+                $barX.removeClass(klass)
               }
             })
           }
 
-          if (y) {
+          if (hasY) {
             $barY.on(md, function (e) {
               start.pageY = e.pageY
-              $barY.addClass('scrolling')
-              e.stopPropagation()
-              e.preventDefault()
+              $barY.addClass(klass)
+              return false
             })
 
             $doc
             .on(mm, function (e) {
-              if ($barY.hasClass('scrolling')) {
+              if ($barY.hasClass(klass)) {
                 current.pageY = e.pageY
                 moveY(current.pageY - start.pageY)
                 start.pageY = current.pageY
-                e.stopPropagation()
-                e.preventDefault()
+                return false
               }
             })
             .on(mu, function (e) {
-              if ($barY.hasClass('scrolling')) {
-                $barY.removeClass('scrolling')
+              if ($barY.hasClass(klass)) {
+                $barY.removeClass(klass)
               }
             })
           }
         },
         keyboard: function() {
+          // bug: 页面 iframe 有滚动条时，方向键控制的是它的滚动条
           var me = 'mouseenter' + ns
           var ml = 'mouseleave' + ns
           var kd = 'keydown' + ns
 
           var hovered = false;
-          $elem.on(me, function() {
+          $elem
+          .on(me, function() {
             hovered = true;
-          });
-          $elem.on(ml, function() {
+          })
+          .on(ml, function() {
             hovered = false;
           });
 
@@ -499,7 +506,7 @@
     },
     destroy: function() {
       var ns = this.namespace
-
+      // TODO: 待完善
       this.$elem.data('scrollbar', '').off(ns)
       this.options.keyboard && $(document).off(ns)
     }
